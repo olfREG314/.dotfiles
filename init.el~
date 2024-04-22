@@ -1,22 +1,17 @@
 
-;; Olfreg314 Eamcs Config
 
-;; Created : 07 March 2024 
-;; Modified : 22 April 2024
+;; Created : 15 April 2024 
+;; Modified : 15 April 2024
 
-
-
-
-
-
-;; ---ref 
-
-
-
+;; Thanks
 ;; For emacs
 ;;   - https://github.com/jakebox/jake-emacs/tree/main :: for categorizing the info, packages, everythigns & all key bindings. Still a lot to learn.
 ;;   - https://blog.sumtypeofway.com/posts/emacs-config.html :: for good write up.
-;;   - https://www.pat;   - https://github.com/nordtheme/emacs/blob/develop/nord-theme.el :: studied
+;;   - https://www.patrickdelliott.com/emacs.d/ :: Was opened in my browser tab.
+;; For theme
+;;   - https://citylights.xyz/ :: awesome colors with less strain on eyes. 
+;;   - https://github.com/dracula/emacs :: did studied the theme code.
+;;   - https://github.com/nordtheme/emacs/blob/develop/nord-theme.el :: studied
 ;; Resources
 ;;   - https://www.patrickdelliott.com/emacs.d/
 ;; All the random people who ask question & who provide the answer even it was 12 years old thread.
@@ -27,73 +22,62 @@
 
 
 
-;;---categorytable  C A T E G O R Y  T A B L E
+
+;; Category Table
 
 
 
-;; --- Category Table               :categorytable
-;; --- Note                         :note
-;; --- Debug                        :debug
-;; --- Startup                      :startup
-;; --- Syntax Checking              :syntacchecking
-;; --- Scrolling                    :scrolling
-;; --- Encoding                     :encoding
-;; --- Theme                        :theme
-;; --- Package Setup                :packagesetup
-;; --- Dashboard                    :dashboard
-;; --- Tab bar                      :tabbar
-;; --- Basic Package                :basicpackages
-;; --- Undo                         :undo
-;; --- Mini Buffer Completion       :minibuffercompletion
-;; --- --- Vertico                  :mini/vertico
-;; --- --- Ivy                      :mini/ivy
-;; --- Prescient                    :prescient
-;; --- Org                          :org
-;; --- --- Org Indentation          :org/indentation
-;; --- --- Org Support Packages     :org/orgsupportpackages
-;; --- Key Bindings                 :keybindings
-;; --- --- Which Key                :key/whichkey
-;; --- --- Evil                     :key/evil
-;; --- --- General                  :key/general
-;; --- Web Dev                      :webdev
-;; --- --- Vue                      :web/vue
+;; --- Todo
+;; --- Done
+;; --- Debug
+;; --- Startup
+;; --- Syntax Checking
+;; --- Scrolling
+;; --- Encoding
+;; --- Theme
+;; --- Packages (inital package configuration to load other packages)
+;; --- Dashboard
+;; --- Basic Packages (packages which does not need high configuration)
+;; --- Undo
+;; --- Mini Buffer Completion
+;; --- Prescient
+;; --- Org
+;; --- Key Bindings
+;; --- General
 
 
 
 
 
 
-;; ---version v1.1  22 Apr 24
+;; --- TODO
 
-;; Added category easily searchabel unique name.
-;; Added recentf, solves problem of order lising on dashboard.
-;; Added 'undo-tree'.
-;; Added 'org-journal' which need to be configured correctly.
-;; Added keybinding for 'perspective-map' which is ' .
-;; Added 'web-mode', support for html, css, js.
-;; Added 'vue-mode'.
-;; Added 'lsp-bridge' with dependencies 'yasnippet', 'markdown-mode' and other python pkgs.
-;; Added 'perspectiver' but need to be configured correctly.
-;; Commented Out bookmarks in dashboard-item-shortcuts.
-;; Added 'highlight-indent-guides'.
-;; Added 'ace-window'.
-;; Added agenda customization to work with the schedules.
-;; Added org agenda keybindings.
-;; Added org-todo-keywords and their faces.
-;; Added 'org-bable'
-;; Added 'evil-org'
 
-;; ---version v1.0  15 Apr 24
 
-;; - Fix "cursor scrolling where the whole screen shifts scroll without smooth scrolling".
-;; - Add everything everything everything basic basic basic. ( took 3x time of waht I thought ).
+;; - Fix relative numbers line is not active at startup
+;; - Add automatic paring
+;;   - electric mode ( inbuilt minor mode )
 
 
 
 
 
 
-;; ---note  N O T E
+;; --- D O N E
+
+
+
+;; --- v1.0
+
+;; - Fix "cursor scrolling where the whole screen shifts scroll without smooth scrolling"
+;; - Add everything everything everything basic basic basic. ( took 3x time of waht I thought )
+
+
+
+
+
+
+;; --- N O T E
 
 
 
@@ -102,8 +86,6 @@
 ;;     `:defer` is for when a package need to load when need & not on start up
 ;;     `:diminish` is for when you don't want to show minor mode in mode line, it come from package diminish
 ;;     `:after` does not work as the word suggest, thats why doom emacs use custom after
-;;     `:ensure` cause the package to be installed if not already installed. If you don't use it, it will show
-;;        `Error (use-package): Cannot load highlight-indent-guides`
 
 ;; --- Comments
 ;;     6 new line after category change
@@ -147,12 +129,13 @@
 
 
 
-;; ---debug  D E B U G
+;; --- D E B U G
 
 
 
 ;; Use `M-x show-paren` if any paran mismatch
 ;; Use 'emacs -q' to start emacs without any config
+
 
 
 ;; While `debug-on-error` gives more detailed info if anything fails
@@ -161,25 +144,28 @@
 ;;   - Ref :
 ;;     https://emacs.stackexchange.com/questions/54455/how-to-get-a-stack-trace-for-eager-macro-expansion-failure
 
-;; (setq debug-on-error t)
-;; (setq debug-on-signal t)
+; (setq debug-on-error t)
+; (setq debug-on-signal t)
 
 
 
 
 
 
-;; ---startup  S T A R T  U P
+;; --- S T A R T  U P
 
 
 
 ;; `Custom-file` saves any face ( apperance change / variable change ) that user does from within emacs GUI tool
 ;; If this path not defined then if any changes made from gui, emacs will insert custom line
 ;;   at the bottom of the `init.el` file. And that can get messey because it just a string of info not readable
+  
 (setq custom-file "~/.emacs.d/emacs-custom.el")
 (load custom-file)
 
+
 ;; A custom start up screen
+
 ;; (defun my-startup-screen ()
 ;;   "Display a custom startup screen with text and colors."
 ;;   (frame-set-title "Welcome to Emacs!")
@@ -189,6 +175,7 @@
 ;;     (set-face-foreground 'default white)
 ;;     (set-face-background 'default blue)))
 ;; ;; (add-hook 'after-init 'my-startup-screen)
+
 
 ;; Disable emacs default gui menus
 (tool-bar-mode -1)
@@ -224,8 +211,7 @@
 
 ;; It saves emacs window config (like vertical split / horizontal split) project dir wise
 ;;   So same session can be start up after restarting emacs
-;; Should not be used with perspective
-;; (desktop-save-mode 1) 
+(desktop-save-mode 1) 
 
 ;; According to internet window layout in emacs sometime get messed up
 ;;   so they use `winner mode` , it will revert back the window config
@@ -259,15 +245,15 @@
 ;;       initial-scratch-message ""
 ;;       initial-buffer-choice t) 
 
-;; These are function and not need to use `setq`,
-;;   it just need to run
-;; (display-line-numbers-mode 1)
-(global-display-line-numbers-mode)
-
 ;; There is a confusion if previous 2 lines are required or not
 ;;   but will check
 ;; Line numbers can be t, 'relative, other stuff also available
-(setq display-line-numbers 'relative)
+(setq display-line-numbers 'relative )
+
+;; These are function and not need to use `setq`,
+;;   it just need to run
+;; (display-line-numbers-mode 1)
+(global-display-line-numbers-mode 1)
 
 ;; Disable line numbers for some mode
 ;; (dolist (mode
@@ -289,7 +275,7 @@
 (setq truncate-lines t)
 
 ;; Tabs are not working anyway
-(setq tab-width 4)
+;; (setq tab-width 4)
 
 ;; Column beyond which automatic line-wrapping should happen
 (setq fill-column 80) ;; NotWorking
@@ -305,11 +291,11 @@
 ;;   :init (setq save-place-limit 100)
 ;;   :config (save-place-mode))
 ;; Below is new one after v25.1, saves file in `.emacd/places`
-(save-place-mode)
+(save-place-mode 1 )
 
 ;; Make buffer name unique
 ;; Ref - https://www.emacswiki.org/emacs/uniquify
-(require 'uniquify)
+(require 'uniquify )
 (setq uniquify-buffer-name-syle 'forward)
 
 ;; Highlight matching parenthesis
@@ -323,16 +309,16 @@
 
 ;; Opens 'recent' file
 ;; Ref - https://www.emacswiki.org/emacs/RecentFiles
-(require 'recentf)
-(setq recentf-auto-cleanup 'never
-	  recentf-max-menu-items 25
-	  recentf-max-saved-items 200)
-(setq recentf-filename-handlers ;; Show home folder path as a ~
-        (append '(abbreviate-file-name) recentf-filename-handlers))
+;; (require 'recentf)
+;; (setq recentf-auto-cleanup 'never
+;; 	  recentf-max-menu-items 25
+;; 	  recentf-max-saved-items 200)
+;; (setq recentf-filename-handlers ;; Show home folder path as a ~
+;;         (append '(abbreviate-file-name) recentf-filename-handlers))
 ;; Save the recent file every 5 minutes, Why - by default emacs save
-  ;; file list on exit, but what if it exit unexpectedly.
-(run-at-time nil (* 5 60) 'recentf-save-list)
-(recentf-mode 1)
+;;   file list on exit, but what if it exit unexpectedly.
+;; (run-at-time nil (* 5 60) 'recentf-save-list)
+;; (recentf-mode 1)
 
 ;; Draw a line between echo area and something named LV
 ;; What is LV
@@ -350,7 +336,7 @@
 
 
 
-;; ---syntaxchecking  S Y N T A X  C H E C K I N G
+;; --- S Y N T A X  C H E C K I N G
 
 
 
@@ -380,7 +366,7 @@
 
 
 
-;; ---scrolling  S C R O L L I N G 
+;; --- S C R O L L I N G 
 
 
 
@@ -429,7 +415,7 @@
 
 
 
-;; ---encoding  E N C O D D I N G
+;; --- E N C O D D I N G
 
 
 
@@ -460,7 +446,7 @@
 
 
 
-;; ---theme  T H E M E
+;; --- T H E M E
 
 
 
@@ -492,7 +478,7 @@
 
 
 
-;; ---packagesetup P A C K A G E  S E T U P
+;; --- P A C K A G E S
 
 
 
@@ -558,7 +544,7 @@
 
 
 
-;; ---dashbaoard  D A S H B O A R D
+;; --- D A S H B O A R D
 
 
 
@@ -587,7 +573,7 @@
 ;;   - a cons of 2 strings which specifies the path of an image to use
 ;;     and other path of a text file to use if image isn't supported.
 ;;     ("path/to/image/file/image.png" . "path/to/text/file/text.txt").
-(setq dashboard-startup-banner 2 )
+(setq dashboard-startup-banner "~/.emacs.d/banner.txt" )
 
 ;; Content is not centered by default. To center, set
 ;; It works actually, not like the css
@@ -601,7 +587,7 @@
 
 ;; Number of items in each category
 (setq dashboard-items '((recents   . 10)
-                        ;; (bookmarks . 10)
+                        (bookmarks . 10)
                         (projects  . 10)
                         (agenda    . 10)
                         (registers . 10)))
@@ -612,7 +598,7 @@
 (setq dashboard-heading-shorcut-format " [%s]")
 
 (setq dashboard-item-shortcuts '((recents   . "r")
-                                 ;; (bookmarks . "m")
+                                 (bookmarks . "m")
                                  (projects  . "p")
                                  (agenda    . "a")
                                  (registers . "e")))
@@ -641,14 +627,13 @@
 
 
 
-;; ---tabbar  T A B  B A R
+;; --- T A B  B A R
 
 
 
 ;; Without power line centaur-tabs will not work
 ;; Ref - https://github.com/ema2159/centaur-tabs/issues/11
-(use-package powerline
-  :ensure t)
+(use-package powerline :ensure t)
 
 
 (use-package centaur-tabs
@@ -677,7 +662,7 @@
 
 
 
-;; ---basicpackages  B A S I C  P A C K A G E S
+;; --- B A S I C  P A C K A G E S
 
 
 
@@ -719,7 +704,7 @@
   :diminish
   :config
   (setq beacon-color "#539afc")
-  (beacon-mode))
+  (beacon-mode 1 ))
 
 
 ;; Highlight any hex value even if its string not like the vim one
@@ -753,7 +738,6 @@
 ;; Does live up to its name. I don't know what it changed.
 ;; Ref - https://github.com/gexplorer/simple-modeline
 (use-package simple-modeline
-  :diminish
   :hook (after-init . simple-modeline-mode))
 
 
@@ -809,8 +793,6 @@
              :demand t)
 
 
-;; Popper helps with switch between pop ups
-;; C-` : toggle message M-` does something but not what I expected
 (use-package popper
   :ensure t ; or :straight t
   :bind (("C-`"   . popper-toggle)
@@ -828,50 +810,12 @@
   (popper-echo-mode +1))               
 
 
-;; Edting root level file
 (use-package sudo-edit)
 
 
-;; Highlight indent in buffers
-;; Ref - https://github.com/DarthFennec/highlight-indent-guides/tree/cf352c85cd15dd18aa096ba9d9ab9b7ab493e8f6
-;; Not showing correct indentation in org mode.
-(use-package highlight-indent-guides
-  :ensure t
-  :config
-  (setq highlight-indent-guides-method 'character)
-  ;; (set-face-background 'highlight-indent-guides-character-face 'nil)
-  (setq highlight-indent-guides-auto-character-face-perc 100)
-  (setq highlight-indent-guides-responsive 'top)
-  (highlight-indent-guides-mode ))
 
 
-;; Did not worked well in org mode too.
-;; (use-package indent-guide
-;;   :ensure t
-;;   :diminish t
-;;   :defer t
-;;   :config
-;;   (setq indent-guide-recursive t)
-;;   (indent-guide-global-mode))
-
-
-(use-package ace-window
-  :ensure t
-  :bind ("M-o" . ace-window)
-  :config
-  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
-  (setq aw-background nil)
-  ;; Does not switch window immediately but way to next action
-  ;; Ref - https://github.com/abo-abo/ace-window
-  ;; (setq aw-dispatch-always t)
-  )
-
-
-
-
-
-
-;; ---undo  U N D O
+;; --- U N D O
 
 
 
@@ -887,25 +831,19 @@
 
 (undo-fu-session-global-mode 1 )
 
-;; Ref - https://github.com/emacsmirror/undo-tree/blob/master/undo-tree.el
-;; When the problem arises I will look into it
-(use-package undo-tree
-  :ensure t
-  :config
-  (global-undo-tree-mode))
 
 
 
 
 
-;; ---minibuffercompletion  M I N I  B U F F E R  C O M P L E T I O N
+;; --- M I N I  B U F F E R  C O M P L E T I O N
 
 
 
 
 
 
-;; ---mini/vertico  ---  V E R T I C O
+;; --- --- V E R T I C O
 
 
 
@@ -1006,7 +944,7 @@
 
 
 
-;; ---mini/ivy  ---  I V Y
+;; --- --- I V Y
 
 
 
@@ -1100,7 +1038,7 @@
 
 
 
-;; ---prescient  P R E S C I E N T
+;; --- ---  P R E S C I E N T
 
 
 
@@ -1112,7 +1050,6 @@
   (setq-default prescient-history-length 1000) ;; More prescient history
   (prescient-persist-mode +1))
 
-
 ;; Use `prescient' for Ivy menus.
 (use-package ivy-prescient
   :after ivy
@@ -1121,7 +1058,6 @@
   (dolist (command '(org-ql-view counsel-find-file fontaine-set-preset))
     (setq ivy-prescient-sort-commands (append ivy-prescient-sort-commands (list command))))
   (ivy-prescient-mode +1))
-
 
 ;; (use-package company-prescient
 ;;   :defer 2
@@ -1134,12 +1070,12 @@
 
 
 
-;; ---org  O R G
+;; --- O R G
 
 
 
 ;; Default files will be created here
-(setq org-directory "~/notes")
+(setq org-directory "~/notefiles")
 
 ;; Org Capture will save into this file
 (setq org-default-notes-file (concat org-directory "/notes.org"))
@@ -1148,21 +1084,10 @@
 ;; but not required when using org-indent-mode as it does automatically
 (setq org-hide-leading-stars t)
 
-;; Org styling, hide markup etc.
+;;  ;; Org styling, hide markup etc.
 (setq org-hide-emphasis-markers t )
 (setq org-pretty-entities t )
 (setq org-ellipsis "…" )
-(setq org-startup-folded 'showeverything)
-(setq org-image-actual-width 300)
-
-(setq org-log-done t)
-(setq org-log-into-drawer t)
-
-;; M-Ret can split lines on items and tables but not headlines and not on anything else (unconfigured)
-(setq org-M-RET-may-split-line '((headline) (item . t) (table . t) (default)))
-
-;; Syntax highlighting in org src block
-(setq org-src-fontify-natively t)
 
 ;; Removes gap between headings when you add a new heading
 ;; (setq org-blank-before-new-entry '((heading . nil) (plain-list-item . nil)))
@@ -1179,24 +1104,13 @@
 
 ;; (setq org-insert-heading-respect-content t )
 
-(setq org-dealine-warning-days 30)
-
-; If something is done, don't show its deadline
-(setq org-agenda-skip-deadline-if-done t)
-
-;; If something is done, don't show when it's scheduled for
-(setq org-agenda-skip-scheduled-if-done t)
-
-;; If something is scheduled, don't tell me it is due soon
-(setq org-agenda-skip-deadline-prewarning-if-scheduled t)
-
 ;; Agenda styling
 ;; (setq org-agenda-tags-column 0 )
 ;; (setq org-agenda-block-separator ?─ )
 ;; (setq org-agenda-time-grid
 ;; 	  '((daily today require-timed)
-;; 	    (800 1000 1200 1400 1600 1800 2000)
-;; 	    " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")))
+;; 		(800 1000 1200 1400 1600 1800 2000)
+;; 		" ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
 ;; (setq org-agenda-current-time-string
 ;;  "◀── now ─────────────────────────────────────────────────")
 
@@ -1215,7 +1129,7 @@
   ;; (org-return-follows-link t)
   ;; (org-src-ask-before-returning-to-edit-buffer nil "org-src is kinda needy out of the box")
   ;; (org-src-window-setup 'current-window)
-  (setq org-agenda-files (list org-directory))
+  ;; (org-agenda-files (list (concat org-directory "~/thedog/notes.org")))
   ;; (defun pt/org-mode-hook ()
   ;;   (when (s-suffix? "todo.org" (buffer-file-name (current-buffer)))
   ;;     (real-auto-save-mode)))
@@ -1226,112 +1140,12 @@
   ;;   (interactive)
   ;;   (org-emphasize ?~))))
 
-(setq org-todo-keywords
-      '((sequence "TODO" "PROG" "HOLD" "UPDATE" "|" "NOTE" "IDEA" "DONE" "CANCELED")
-        ;; (sequence "WORK" "HOME" "|" "DONE")
-        ;; For projects
-        (sequence "BACKLOG"          ;; Featues, fix that need to be implemented but which are not in priority
-                  "IDEA"             ;; Space for capture new concepts, suggestions, improvements
-
-                  "PLANNING"         ;; Items which are ready to be worked upon
-                  "RESEARCH"         ;; Gather information.
-
-                  "PREPARATION"      ;; Setup necessary resources, environments, tools for development.
-                  "REQUIREMENT"      ;; Defining and clarifying the specific requirements & specification for the feature.
-
-                  "EXECUTION"        ;; Signifies tasks that are actively worked upon
-                  "DEVELOPMENT"      ;; Represents tasks relating to coding, building, creating the project or feature.
-                  "TESTING"          ;; Verifing & validatig the functionality and quality of the developed feature.
-
-	          "BUG(b)"           ;; Bugs Bugs Bugs, Bugs are attracted to blue lights and I use citylights theme.
-
-                  "REVIEW"           ;; Undergoing evaluation or scrutiny to ensure the requirements are met.
-                  "FEEDBACK"         ;; Provides mechanism for collecting input, suggestions, criticisms.
-
-                  "REVISION"         ;; Tasks that requires modification, updates, corrections based on feedbacks.
-                  "ADJUSTMENTS"      ;; Minor tweaks or alteration to the projects or feature to enchance functionality.
-
-                  "DOCUMENTING"      ;; Documentation the feature, process, feedback , if cancelled why, if done what time frame.
-
-                  "|"
-
-                  "DONE"             ;; Completed, reviewed, meet the criteria as per the documentation.
-                  "BLOCKED"          ;; Items which got blocked due to some situations.
-                  "NEEDRESOLUTION"   ;; Further discussion or decision making to determine the course of action.
-                  "CANCELLED"        ;; For whatever reason it got cancelled.
-                  )))
-
-
-;; Will need to make decision or will just put at top.
-;; Why is it here, have to add colors to the keyword faces.
-(defvar citylights-fg                "#b7c5d3")
-(defvar citylights-d-fg              "#9AAEC1")
-(defvar citylights-b-grey            "#52616f")
-(defvar citylights-grey              "#41505e")
-(defvar citylights-d-grey            "#2a343c")
-(defvar citylights-dd-grey           "#192631")
-(defvar citylights-d-black           "#000000")
-(defvar citylights-bg                "#1D252C")
-(defvar citylights-black             "#10151c")
-(defvar citylights-red               "#d95468")
-(defvar citylights-error             "#e27e8d")
-(defvar citylights-magenta           "#b62d65")
-      ;; (citylights-orange         "#d98e48")
-(defvar citylights-orange            "#e3ac78")
-      ;; (citylights-orange         "#e0a167")
-(defvar citylights-yellow            "#ebbf83")
-(defvar citylights-green             "#8bd49c")
-(defvar citylights-b-green           "#98fb98")
-(defvar citylights-teal              "#33ced8")
-(defvar citylights-cyan              "#22c7d3")
-      ;; (citylights-cyan           "#70e1e8")
-(defvar citylights-water             "#5ec4ff")
-(defvar citylights-blue              "#539afc")
-(defvar citylights-violet            "#6a5acd")
-
-
-(setq org-todo-keyword-faces
-      `(        ( "BACKLOG"            . ,citylights-violet) ;; Featues, fix that need to be implemented but which are not in priority
-                ( "IDEA"               . ,citylights-violet) ;; Space for capture new concepts, suggestions, improvements
-
-                ;; ( "PLANNING"         ;; Items which are ready to be worked upon
-                ;; ( "RESEARCH"         ;; Gather information.
-
-                ;; ( "PREPARATION"      ;; Setup necessary resources, environments, tools for development.
-                ;; ( "REQUIREMENT"      ;; Defining and clarifying the specific requirements & specification for the feature.
-
-                ;; ( "EXECUTION"        ;; Signifies tasks that are actively worked upon
-                ;; ( "DEVELOPMENT"      ;; Represents tasks relating to coding, building, creating the project or feature.
-                ;; ( "TESTING"          ;; Verifing & validatig the functionality and quality of the developed feature.
-
-	        ( "BUG"               . ,citylights-error) ;; Bugs Bugs Bugs, Bugs are attracted to blue lights and I use citylights theme.
-
-                ;; ( "REVIEW"           ;; Undergoing evaluation or scrutiny to ensure the requirements are met.
-                ;; ( "FEEDBACK"         ;; Provides mechanism for collecting input, suggestions, criticisms.
-
-                ;; ( "REVISION"         ;; Tasks that requires modification, updates, corrections based on feedbacks.
-                ;; ( "ADJUSTMENTS"      ;; Minor tweaks or alteration to the projects or feature to enchance functionality.
-
-                ( "DOCUMENTING"       . ,citylights-blue) ;; Documentation the feature, process, feedback , if cancelled why, if done what time frame.
-
-                ( "DONE"              . ,citylights-grey) ;; Completed, reviewed, meet the criteria as per the documentation.
-                ( "BLOCKED"           . ,citylights-error) ;; Items which got blocked due to some situations.
-                ( "NEEDRESOLUTION"    . ,citylights-violet) ;; Further discussion or decision making to determine the course of action.
-                ( "CANCELLED"         . ,citylights-red) ;; For whatever reason it got cancelled.
-		( "HOLD"              . ,citylights-violet)
-		  ))
-
-;; Org babel adds support for executing code
-;;   inside code blocks in org mode
-(org-babel-do-load-languages
- 'org-babel-load-languages '((shell . t)))
 
 
 
 
 
-
-;; ---org/indetation  ---  O R G  I N D E N T A T I O N
+;; --- --- O R G  I N D E N T A T I O N
 
 
 
@@ -1343,51 +1157,24 @@
 ;; (setq org-startup-indentd t)
 
 ;; Text line that are not headlines are indented.
-;; Its also solves the problem of, indentation of line wrapping.
-;; So just by enabling org-adapt-indentaiton, the long line which
-;;   are trunacated to next line will start from the left most side
-;;   without indent which just looks like beauty and the beast.
-;;   Enabling org-indent-mode solves this problem.
-;; It also solve problem of "why do I have to backspace to enter new headline"
-;;   So when having indent headline, pressing enter will get to new line
-;;     but when enter *** for headline, it will not register it.
-;;     So, either we have to press C+enter or backspace to first coloum to
-;;     again enter the stars.
 ;; Ref - https://orgmode.org/manual/Org-Indent-Mode.html
-(setq org-startup-indented t)
-
-(setq org-indent-indentation-per-level 4)
-
-(setq org-indent-mode-turns-off-org-adapt-indentation nil)
+;; (org-indent-mode 1)
 
 ;; Difference between 'org-indent-mode' & 'org-adapt-indentation'
-;; 'org-adapt-indentation' uses hard spaces, this will make the indent look outside
-;;    the emacs too but not exactly like one ot two spaces.
 
 ;; Indentation in org mode READ the variable doc.
 (setq org-adapt-indentation t) 
 
-;; The whole indentation is pretty bad. Now every nest heading content shift by one char
-;; Why - cause every heading the stars are increases by 1.
-;; So the indented content code actually increases te content shift by 1 char by every nested heading.
-;; I guess this code problem and cannot be solved easily.
+;; (org-indent-indentation-per-level 0)
 
 
 
 
 
 
-;; ---org/supportpackages  ---  O R G  S U P P O R T  P A C K A G E S
+;; --- --- O R G  S U P P O R T  P A C K A G E S
 
 
-
-(use-package evil-org
-  :ensure t
-  :after org
-  :hook (org-mode . (lambda () evil-org-mode))
-  :config
-  (require 'evil-org-agenda)
-  (evil-org-agenda-set-keys))
 
 ;; Modifies the headline
 (use-package org-superstar
@@ -1396,7 +1183,7 @@
   ;; Can also add more items to the below headline list to make headline cycle to them
   (setq org-superstar-headline-bullets-list "|" )
   ;; Changes the items icon differnt
-  (setq org-superstar-prettify-item-bullets nil)
+  (setq org-superstar-prettify-item-bullets t)
   ;; I don't know what below does
   ;; (setq org-superstar-special-todo-items t) ;; Makes TODO header bullets into boxes
   ;; (setq org-superstar-todo-bullet-alist '(("TODO" . 9744)
@@ -1471,32 +1258,19 @@
 ;;   :config
 ;;   (org-roam-db-autosync-mode))
 
-(use-package org-journal
-  :ensure t
-  :defer t
-  :init
-  (setq org-journal-prefix-key "C-c j ")
-  :config
-  ;; (setq org-journal-dir "~/notes/journal/")
-  (setq org-journal-file-type 'yearly)
-  (setq	org-journal-date-format "%A, %d %B %Y")
-  (setq org-journal-file-header "#+TITLE: Yearly Journal\n")
-  (add-to-list 'org-agenda-files org-journal-dir)
-  (setq org-journal-enable-agenda-integration t))
+
+
+
+
+
+;; --- K E Y  B I N D I N G S
 
 
 
 
 
 
-;; ---keybindings  K E Y  B I N D I N G S
-
-
-
-
-
-
-;; ---key/whichkey  ---  W H I C H  K E Y
+;; --- --- W H I C H  K E Y
 
 
 
@@ -1535,7 +1309,7 @@
 
 
 
-;; ---key/evil  ---  E V I L
+;; --- --- E V I L
 
 
 
@@ -1670,11 +1444,11 @@
 
 
 
-;; ---key/general ---  G E N E R A L
+;; --- G E N E R A L
 
 
 
-;; General is enabled at top because :after keyword was working.
+;; Enabled at top because some before packages uses it.
 
 
 ;; Some of the codes are commented out as its not required by me as of now
@@ -1705,7 +1479,7 @@
 
  ;; "Applications"
 "a" '(nil :which-key "applications")
-"ao" '(org-agenda :which-key "org-agenda")
+;; "ao" '(org-agenda :which-key "org-agenda")
 ;; "am" '(mu4e :which-key "mu4e")
 "aC" '(calc :which-key "calc")
 "ac" '(org-capture :which-key "org-capture")
@@ -1817,7 +1591,6 @@
   :keymaps 'override
   "/" 'swiper
   "?" 'evil-search-forward
-  "'" 'perspective-map
   )
 
 ;; Insert keymaps
@@ -1983,164 +1756,9 @@ _q_uit          _e_qualize        _]_forward     ^
 ;;   ("q" nil "quit"))
 
 
-;; If key don't work after eval-region , then emacs-restart. Why
-(general-define-key
- :prefix ","
- :states '(normal motion visual)
- :keymaps '(org-mode-map)
- "" nil
- ;; "A" '(org-archive-subtree-default :which-key "org-archive")
- "a" '(org-agenda :which-key "org agenda")
- ;; "6" '(org-sort :which-key "sort")
- "c" '(org-capture :which-key "org-capture")
- "s" '(org-schedule :which-key "schedule")
- ;; "S" '(jib/org-schedule-tomorrow :which-key "schedule tmrw")
- "d" '(org-deadline :which-key "deadline")
- "g" '(counsel-org-goto :which-key "goto heading")
- "t" '(counsel-org-tag :which-key "set tags")
- "p" '(org-set-property :which-key "set property")
- ;; "r" '(jib/org-refile-this-file :which-key "refile in file")
- "e" '(org-export-dispatch :which-key "export org")
- ;; "," '(jib/org-set-startup-visibility :which-key "startup visibility")
- "." '(org-toggle-narrow-to-subtree :which-key "toggle narrow to subtree")
- "H" '(org-html-convert-region-to-html :which-key "convert region to html")
- ;; "C" '(jib/org-copy-link-to-clipboard :which-key "copy link to clipboard")
- ;; "=" '(ap/org-count-words :which-key "ap/org-count-words")
-
- "1" '(org-toggle-link-display :which-key "toggle link display")
- "2" '(org-toggle-inline-images :which-key "toggle images")
- ;; "3" '(jib/org-occur-unchecked-boxes :which-key "occur unchecked boxes")
-
- "b" '(nil :which-key "babel")
- "bt" '(org-babel-tangle :which-key "org-babel-tangle")
- "bb" '(org-edit-special :which-key "org-edit-special")
- "bc" '(org-edit-src-abort :which-key "org-edit-src-abort")
- "bk" '(org-babel-remove-result-one-or-many :which-key "org-babel-remove-result-one-or-many")
-
- ;; "x" '(nil :which-key "text")
- ;; "xb" (spacemacs|org-emphasize spacemacs|org-bold ?*)
- ;; "xb" (spacemacs|org-emphasize spacemacs|org-bold ?*)
- ;; "xc" (spacemacs|org-emphasize spacemacs|org-code ?~)
- ;; "xi" (spacemacs|org-emphasize spacemacs|org-italic ?/)
- ;; "xs" (spacemacs|org-emphasize spacemacs|org-strike-through ?+)
- ;; "xu" (spacemacs|org-emphasize spacemacs|org-underline ?_)
- ;; "xv" (spacemacs|org-emphasize spacemacs|org-verbose ?~) ;; I realized that ~~ is the same and better than == (Github won't do ==)
-
- ;; insert
- "i" '(nil :which-key "insert")
-
- "il" '(org-insert-link :which-key "org-insert-link")
- "l" '(org-insert-link :which-key "org-insert-link") ;; More convenient access
- "iL" '(counsel-org-link :which-key "counsel-org-link")
- ;; "it" '(jb-hydra-org-table/body :which-key "tables")
-
- "is" '(nil :which-key "insert stamp")
- "iss" '((lambda () (interactive) (call-interactively (org-time-stamp-inactive))) :which-key "org-time-stamp-inactive")
- "isS" '((lambda () (interactive) (call-interactively (org-time-stamp nil))) :which-key "org-time-stamp")
-
- ;; clocking
- "c" '(nil :which-key "clocking")
- "ci" '(org-clock-in :which-key "clock in")
- "co" '(org-clock-out :which-key "clock out")
- "cj" '(org-clock-goto :which-key "jump to clock")
-
- )
-
-
-
-
-
-
-;; ---webdev  W E B  D E V
-
-
-
-(use-package web-mode
-  :ensure t
-  :defer t
-  :init
-  (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode)) ;; Open .html files in web-mode
-  (add-to-list 'auto-mode-alist '("\\.css\\'" . web-mode)) ;; Open .html files in web-mode
-  (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode)) ;; Open .html files in web-mode
-  :config
-  (setq web-mode-enable-current-element-highlight t
-        web-mode-enable-current-column-highlight t)
-  :general
-  (general-def
-  :prefix ","
-  :states 'motion
-  :keymaps 'web-mode-map
-  "" nil
-  "i" '(web-mode-buffer-indent :which-key "web mode indent")
-  "c" '(web-mode-fold-or-unfold :which-key "web mode toggle fold")
-  ))
-
-
-
-
-
-
-;; ---web/vue  ---  V U E
-
-
-
-(use-package vue-mode
-  :ensure t
-  :defer t
-  :config
-  ;; disables the ugly background
-  (add-hook 'mmm-mode-hook
-			(lambda ()
-			  (set-face-background 'mmm-default-submode-face nil))))
-
-(add-to-list 'load-path "~/.emacs.d/cstm-package-repo/lsp-bridge/")
-
-
-;; Required by lsp-bridge
-(use-package yasnippet
-  :ensure t
-  :config
-  (yas-global-mode 1))
-
-;; Provides snippet for the yasnippet
-;; List of snippets available M-x yas-describe-table
-(use-package yasnippet-snippets
-  :ensure t)
-
-;; required by lsp-bridge
-(use-package markdown-mode
-  :ensure t)
-
-
-;; Lsp bridge is an async language-server and alternative to the lsp-mode & eglot.
-;; Language-server installed
-;;   - '@vue/language-server' :: vue :: https://www.npmjs.com/package/@vue/language-server
-;;     - installed 'markdown-mode' is the requirement.
-;;     - installed bunch of python packages, some are from pacman & aur repo.
-;;     - a mode is also required by the server which here it is using 'web-mode'
-;; Ref - https://github.com/manateelazycat/lsp-bridge?tab=readme-ov-file
-(require 'lsp-bridge)
-(global-lsp-bridge-mode)
-
-
-;; Perspective is not good as I thought, and need more modification.
-(use-package perspective
-  :ensure t
-  :bind
-  ("C-x C-b" . persp-list-buffers)
-  :custom
-  (persp-mode-prefix-key (kbd "C-c M-p"))
-  :init
-  (persp-mode)
-  :config
-  (setq persp-state-default-file "~/.perspective-default-state-save-file")
-  (add-hook 'kill-emacs-hook #'persp-state-save)
-  )
- 
-
 
 
 
 
 ;; Do you get hugs at night or tears swallow you up.
-;; ---end  E N D
+;; --- E N D
