@@ -1,0 +1,21 @@
+# https://man.archlinux.org/man/zathurarc.5
+# set selection-clipboard clipboard 
+
+map D set "first-page-column 1:1"
+map <C-d> set "first-page-column 1:2"
+
+# set default-fg "#AABBCC" #does not work
+
+set recolor true
+
+# Changed from black to grey for readibility
+set recolor-darkcolor "#545454" #Dark grey
+# set recolor-darkcolor "#757575" #Grey
+set recolor-lightcolor "#ffffff"
+
+set show-directories true
+set continuous-hist-save true 
+
+set database "sqlite"
+set sandbox "normal"
+
