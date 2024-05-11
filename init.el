@@ -1,9 +1,7 @@
 
-;; Olfreg314 Eamcs Config
 
 ;; Created : 07 March 2024 
-;; Modified : 22 April 2024
-
+;; Modified : 11 May 2024
 
 
 
@@ -42,7 +40,7 @@
 ;; --- Package Setup                :packagesetup
 ;; --- Dashboard                    :dashboard
 ;; --- Tab bar                      :tabbar
-;; --- Basic Package                :basicpackages
+;; --- Packages Basic               :packagesbasic
 ;; --- Undo                         :undo
 ;; --- Mini Buffer Completion       :minibuffercompletion
 ;; --- --- Vertico                  :mini/vertico
@@ -60,6 +58,27 @@
 
 
 
+
+;; ---version v1.2 11 May 24
+
+;; Added status for study in todo list.
+;; Added version control to true.
+;; Added support for backup for files but need further improvement.
+;; BUG line number mode need further fixing.
+;; BUG line trunacating need further fixing but for now it work by manually enabling it even in org mode correclty.
+;; Added support for doom theme just for easily test out different theme.
+;; Added shortcut for switching tab for centaur-tabs package by C-Tab and C-S-Tab.
+;; Added support for popper pkg for different buffers and modes.
+;; Added supersave package for saving buffer in different scenario.
+;; Modified undo-tree but need further fixing.
+;; Added support to show agenda logs of previous days completed tasks by default.
+;; Added more todo list items, like "learn, study-book, underway, focus, revist, seek-feedback, etc".
+;; Added keyword faces for newly added todo list items.
+;; Added support for pdf through pdf-tools.
+;; Added org-noter but need further customization to work.
+;; Added calfw support for calendar view of task but need further customization.
+;; Disabled lsp-bridge because of unexpected multiple crashes. Need extensive look up.
+;; Added json-mode for json files.
 
 
 
@@ -114,6 +133,7 @@
 ;;     3 dash before category name
 ;;     2 set of 3 dash before sub-category name
 ;;     Single line comment for single line code is applicable without any newline
+;;     The above line is like time-table, we are going to face dissapointment.
 
 ;; --- Package
 ;;     `require` load a feature if not already loaded.
@@ -161,8 +181,8 @@
 ;;   - Ref :
 ;;     https://emacs.stackexchange.com/questions/54455/how-to-get-a-stack-trace-for-eager-macro-expansion-failure
 
-;; (setq debug-on-error t)
-;; (setq debug-on-signal t)
+(setq debug-on-error t)
+; (setq debug-on-signal t) ;; Press esc for debuggert to go to next error while in debug mode.
 
 
 
@@ -178,6 +198,18 @@
 ;;   at the bottom of the `init.el` file. And that can get messey because it just a string of info not readable
 (setq custom-file "~/.emacs.d/emacs-custom.el")
 (load custom-file)
+
+(setq version-control t)
+(setq make-backup-files nil)
+;; backup by copying how its doing now
+(setq backup-by-copying t)
+
+(setq delete-old-versions t)
+(setq kept-new-versions 5)
+(setq kept-old-versions 5)
+
+; (setq backup-directory-alist '(("." . "~/.emacs.d/backup"))
+(setq backup-directory-alist (list (cons "." (concat user-emacs-directory "backup/"))))
 
 ;; A custom start up screen
 ;; (defun my-startup-screen ()
@@ -262,12 +294,19 @@
 ;; These are function and not need to use `setq`,
 ;;   it just need to run
 ;; (display-line-numbers-mode 1)
-(global-display-line-numbers-mode)
+;; (global-display-line-numbers-mode)
 
 ;; There is a confusion if previous 2 lines are required or not
 ;;   but will check
 ;; Line numbers can be t, 'relative, other stuff also available
-(setq display-line-numbers 'relative)
+;; (setq display-line-numbers 'relative)
+
+;;   (defun display-line-numbers--turn-on ()
+;;     "Turn on `display-line-numbers-mode'."
+;;     (unless (or (minibufferp) (eq major-mode 'pdf-view-mode))
+;;       (display-line-numbers-mode 1)))
+
+;; (display-line-numbers--turn-on )
 
 ;; Disable line numbers for some mode
 ;; (dolist (mode
@@ -344,6 +383,18 @@
 ;; Some problem with 'global-truncate-line'
 ;; And when identation is enabled in org mode, visual-line-mode will start from start next line
 ;; (visual-line-mode 1)
+
+;; Word wrapping and truncating in emacs is little complicated.
+;; As turncate-line does not take effec if truncate-partial-width-windows is true/number.
+;; Word wrapping does not take effect if truncate-lines is enabled.
+;; Thats why setq-default is used for word-wrap.
+;; The limitation above is described in their documentation.
+;; Visual line mode can also be enabled without below 3 lines but as in documentation,
+;; it will create problem with org-indentation.
+;; So its a circle of confusion.
+(setq-default word-wrap t)
+(setq truncate-lines t)
+(setq truncate-partial-width-windows nil)
 
 
 
@@ -487,6 +538,14 @@
 ;;   :config
 ;;   (load-theme 'gruvbox))
 
+;; (use-package doom-themes
+;;   :ensure t
+;;   :config
+;;   (setq doom-themes-enable-bold nil
+;; 		doom-themes-enable-italic nil)
+;;   (load-theme 'doom-one t)
+;;   ;; (doom-themes-org-config)
+;;   )
 
 
 
@@ -670,6 +729,11 @@
   (centaur-tabs-mode t)
   :hook
   (dashboard-mode . centaur-tabs-local-mode)
+  ;; In emacs TAB and <tab> has different meanings.
+  ;; Ref - https://emacs.stackexchange.com/questions/9631/what-is-the-difference-between-tab-and-tab
+  :bind ( ("C-<tab>" . centaur-tabs-forward)
+	  ("C-<iso-lefttab>" . centaur-tabs-backward ))
+  
   )
   
 
@@ -677,7 +741,7 @@
 
 
 
-;; ---basicpackages  B A S I C  P A C K A G E S
+;; ---packages  B A S I C  P A C K A G E S
 
 
 
@@ -818,14 +882,28 @@
          ("C-M-`" . popper-toggle-type))
   :init
   (setq popper-reference-buffers
-        '("\\*Messages\\*"
+        '(custom-mode
+	  compilation-mode
+	  message-mode
+	  help-mode
+	  occur-mode
+	  "^\\*Warning\\*"
+	  "^\\*Compile-log\\*"
+	  "^\\*Backtrace\\*"
+	  "^\\*Messages\\*"
+	  "^\\*Completions\\*"
+	  "^\\*scratch\\*"
+	  "^\\*eshell\\*"
+
           "Output\\*$"
           "\\*Async Shell Command\\*"
-          help-mode
-          compilation-mode))
+          "\\*Shell Command Output\\*"
+	  "[Oo]output\\*"
+          ))
+  (setq popper-group-function #'popper-group-by-projectile)
   (popper-mode +1)
   ;; For echo area hints
-  (popper-echo-mode +1))               
+  (popper-echo-mode +1))
 
 
 ;; Edting root level file
@@ -867,6 +945,19 @@
   )
 
 
+(use-package super-save
+  :ensure t
+  :diminish super-save-mode
+  :defer 2
+  :config
+  (setq super-save-auto-save-when-idle t
+	super-save-idle-duration 5
+	super-save-triggers
+	'(evil-window-next evil-window-prev ace-window balance-windows other-window next-buffer previous-buffer))
+	(super-save-mode +1))
+  
+
+
 
 
 
@@ -889,10 +980,14 @@
 
 ;; Ref - https://github.com/emacsmirror/undo-tree/blob/master/undo-tree.el
 ;; When the problem arises I will look into it
-(use-package undo-tree
-  :ensure t
-  :config
-  (global-undo-tree-mode))
+;; (use-package undo-tree
+;;   :ensure t
+;;   :config
+;;   (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
+;;   (setq undo-tree-auto-save-history t)
+
+;;   (global-undo-tree-mode))
+
 
 
 
@@ -1190,6 +1285,11 @@
 ;; If something is scheduled, don't tell me it is due soon
 (setq org-agenda-skip-deadline-prewarning-if-scheduled t)
 
+(setq org-agenda-show-log t)
+
+;; Will show previous days done list, so you can see what you have done yesterday or the day before that.
+(setq org-agenda-start-with-log-mode t)
+
 ;; Agenda styling
 ;; (setq org-agenda-tags-column 0 )
 ;; (setq org-agenda-block-separator ?─ )
@@ -1227,38 +1327,58 @@
   ;;   (org-emphasize ?~))))
 
 (setq org-todo-keywords
-      '((sequence "TODO" "PROG" "HOLD" "UPDATE" "|" "NOTE" "IDEA" "DONE" "CANCELED")
+      '((sequence "TODO" "PROG" "HOLD" "UPDATE" "IDEA" "NOTE" "ACTIVE" "|"  "DONE" "CANCELED")
         ;; (sequence "WORK" "HOME" "|" "DONE")
-        ;; For projects
-        (sequence "BACKLOG"          ;; Featues, fix that need to be implemented but which are not in priority
-                  "IDEA"             ;; Space for capture new concepts, suggestions, improvements
 
-                  "PLANNING"         ;; Items which are ready to be worked upon
-                  "RESEARCH"         ;; Gather information.
+	                                      ;; For Study     
+	 
+	(sequence "LEARN"                     ;; Currently studying the topic and making physical or digital notes.
+		  "STUDY-BOOK"                ;; Book which currently reading
 
-                  "PREPARATION"      ;; Setup necessary resources, environments, tools for development.
-                  "REQUIREMENT"      ;; Defining and clarifying the specific requirements & specification for the feature.
+	          "UNDERWAY"                  ;; Indicates tasks or topics that are actively studying or working on.
+		  "FOCUS"                     ;; Signifies tasks or topics that require focused attention.
 
-                  "EXECUTION"        ;; Signifies tasks that are actively worked upon
-                  "DEVELOPMENT"      ;; Represents tasks relating to coding, building, creating the project or feature.
-                  "TESTING"          ;; Verifing & validatig the functionality and quality of the developed feature.
+		  "REVISIT"                   ;; Topics that need to be revist to understand better.
+		  ;; "SEEK-FEEDBACK"          ;; Topics that need to be asked to peers, teachers, metors.
 
-	          "BUG(b)"           ;; Bugs Bugs Bugs, Bugs are attracted to blue lights and I use citylights theme.
+	          "CRE-CHEATSHEET"            ;; Creating cheatsheet (a way to summerise and easy searchable note) physically.
+	          "CRE-DIGI-CHEATSHEET"       ;; Create cheatsheet digitally throught latex
 
-                  "REVIEW"           ;; Undergoing evaluation or scrutiny to ensure the requirements are met.
-                  "FEEDBACK"         ;; Provides mechanism for collecting input, suggestions, criticisms.
+	          "|"  
 
-                  "REVISION"         ;; Tasks that requires modification, updates, corrections based on feedbacks.
-                  "ADJUSTMENTS"      ;; Minor tweaks or alteration to the projects or feature to enchance functionality.
+	          "MASTERED"                  ;; When the topic complete.
+		  )
+                                              ;; For projects
 
-                  "DOCUMENTING"      ;; Documentation the feature, process, feedback , if cancelled why, if done what time frame.
+        (sequence "BACKLOG"                   ;; Featues, fix that need to be implemented but which are not in priority
+                  "IDEA"                      ;; Space for capture new concepts, suggestions, improvements
+
+                  "PLANNING"                  ;; Items which are ready to be worked upon
+                  "RESEARCH"                  ;; Gather information.
+
+                  "PREPARATION"               ;; Setup necessary resources, environments, tools for development.
+                  "REQUIREMENT"               ;; Defining and clarifying the specific requirements & specification for the feature.
+
+                  "EXECUTION"                 ;; Signifies tasks that are actively worked upon
+                  "DEVELOPMENT"               ;; Represents tasks relating to coding, building, creating the project or feature.
+                  "TESTING"                   ;; Verifing & validatig the functionality and quality of the developed feature.
+
+                  "BUG(b)"                    ;; Bugs Bugs Bugs, Bugs are attracted to blue lights and I use citylights theme.
+
+                  "REVIEW"                    ;; Undergoing evaluation or scrutiny to ensure the requirements are met.
+                  "FEEDBACK"                  ;; Provides mechanism for collecting input, suggestions, criticisms.
+
+                  "REVISION"                  ;; Tasks that requires modification, updates, corrections based on feedbacks.
+                  "ADJUSTMENTS"               ;; Minor tweaks or alteration to the projects or feature to enchance functionality.
+
+                  "DOCUMENTING"               ;; Documentation the feature, process, feedback , if cancelled why, if done what time frame.
 
                   "|"
 
-                  "DONE"             ;; Completed, reviewed, meet the criteria as per the documentation.
-                  "BLOCKED"          ;; Items which got blocked due to some situations.
-                  "NEEDRESOLUTION"   ;; Further discussion or decision making to determine the course of action.
-                  "CANCELLED"        ;; For whatever reason it got cancelled.
+                  "DONE"                      ;; Completed, reviewed, meet the criteria as per the documentation.
+                  "BLOCKED"                   ;; Items which got blocked due to some situations.
+                  "NEEDRESOLUTION"            ;; Further discussion or decision making to determine the course of action.
+                  "CANCELLED"                 ;; For whatever reason it got cancelled.
                   )))
 
 
@@ -1291,8 +1411,22 @@
 
 
 (setq org-todo-keyword-faces
-      `(        ( "BACKLOG"            . ,citylights-violet) ;; Featues, fix that need to be implemented but which are not in priority
-                ( "IDEA"               . ,citylights-violet) ;; Space for capture new concepts, suggestions, improvements
+	  `(    ("LEARN"                      . ,citylights-yellow)     ;; Currently studying the topic and making physical or digital notes.
+		("STUDY-BOOK"                 . ,citylights-green)
+
+	        ("UNDERWAY"                   . ,citylights-blue)       ;; Indicates tasks or topics that are actively studying or working on.
+		("FOCUS"                      . ,citylights-blue)       ;; Signifies tasks or topics that require focused attention.
+
+		("REVISIT"                    . ,citylights-cyan)       ;; Topics that need to be revist to understand better.
+	        ;; ("SEEK-FEEDBACK")                                  ;; Topics that need to be asked to peers, teachers, metors.
+
+	        ("CRE-CHEATSHEET"             . ,citylights-water)      ;; Creating cheatsheet (a way to summerise and easy searchable note) physically.
+	        ;; ("CRE-DIGI-CHEATSHEET")                              ;; Create cheatsheet digitally throught latex
+
+	        ("MASTERED"                   . ,citylights-grey)     ;; When the topic complete.
+
+                ( "BACKLOG"                   . ,citylights-violet)     ;; Featues, fix that need to be implemented but which are not in priority
+                ( "IDEA"                      . ,citylights-violet)     ;; Space for capture new concepts, suggestions, improvements
 
                 ;; ( "PLANNING"         ;; Items which are ready to be worked upon
                 ;; ( "RESEARCH"         ;; Gather information.
@@ -1304,7 +1438,7 @@
                 ;; ( "DEVELOPMENT"      ;; Represents tasks relating to coding, building, creating the project or feature.
                 ;; ( "TESTING"          ;; Verifing & validatig the functionality and quality of the developed feature.
 
-	        ( "BUG"               . ,citylights-error) ;; Bugs Bugs Bugs, Bugs are attracted to blue lights and I use citylights theme.
+                ( "BUG"                      . ,citylights-error)       ;; Bugs Bugs Bugs, Bugs are attracted to blue lights and I use citylights theme.
 
                 ;; ( "REVIEW"           ;; Undergoing evaluation or scrutiny to ensure the requirements are met.
                 ;; ( "FEEDBACK"         ;; Provides mechanism for collecting input, suggestions, criticisms.
@@ -1312,13 +1446,15 @@
                 ;; ( "REVISION"         ;; Tasks that requires modification, updates, corrections based on feedbacks.
                 ;; ( "ADJUSTMENTS"      ;; Minor tweaks or alteration to the projects or feature to enchance functionality.
 
-                ( "DOCUMENTING"       . ,citylights-blue) ;; Documentation the feature, process, feedback , if cancelled why, if done what time frame.
+                ( "DOCUMENTING"              . ,citylights-blue)        ;; Documentation the feature, process, feedback , if cancelled why, if done what time frame.
 
-                ( "DONE"              . ,citylights-grey) ;; Completed, reviewed, meet the criteria as per the documentation.
-                ( "BLOCKED"           . ,citylights-error) ;; Items which got blocked due to some situations.
-                ( "NEEDRESOLUTION"    . ,citylights-violet) ;; Further discussion or decision making to determine the course of action.
-                ( "CANCELLED"         . ,citylights-red) ;; For whatever reason it got cancelled.
-		( "HOLD"              . ,citylights-violet)
+		( "ACTIVE"                   . ,citylights-green)
+
+                ( "DONE"                     . ,citylights-grey)        ;; Completed, reviewed, meet the criteria as per the documentation.
+                ( "BLOCKED"                  . ,citylights-error)       ;; Items which got blocked due to some situations.
+                ( "NEEDRESOLUTION"           . ,citylights-violet)      ;; Further discussion or decision making to determine the course of action.
+                ( "CANCELLED"                . ,citylights-red)         ;; For whatever reason it got cancelled.
+	        ( "HOLD"                     . ,citylights-violet)
 		  ))
 
 ;; Org babel adds support for executing code
@@ -1471,18 +1607,103 @@
 ;;   :config
 ;;   (org-roam-db-autosync-mode))
 
-(use-package org-journal
+;; (use-package org-journal
+;;   :ensure t
+;;   :defer t
+;;   :init
+;;   (setq org-journal-prefix-key "C-c j ")
+;;   :config
+;;   ;; (setq org-journal-dir "~/notes/journal/")
+;;   (setq org-journal-file-type 'yearly)
+;;   (setq	org-journal-date-format "%A, %d %B %Y")
+;;   (setq org-journal-file-header "#+TITLE: Yearly Journal\n")
+;;   ;; (add-to-list 'org-agenda-files org-journal-dir)
+;;   (setq org-journal-enable-agenda-integration t))
+
+;; (use-package auctex
+;;   :ensure t
+;;   :defer t
+;;   )
+
+(use-package pdf-tools
   :ensure t
   :defer t
-  :init
-  (setq org-journal-prefix-key "C-c j ")
+  ;; stop pdf-tools being automatically updated when I update the
+  ;; rest of my packages, since it would need the installation command and restart
+  ;; each time it updated.
+  :pin manual
+  :mode  ("\\.pdf\\'" . pdf-view-mode)
   :config
-  ;; (setq org-journal-dir "~/notes/journal/")
-  (setq org-journal-file-type 'yearly)
-  (setq	org-journal-date-format "%A, %d %B %Y")
-  (setq org-journal-file-header "#+TITLE: Yearly Journal\n")
-  (add-to-list 'org-agenda-files org-journal-dir)
-  (setq org-journal-enable-agenda-integration t))
+  (pdf-loader-install)
+  (setq-default pdf-view-display-size 'fit-height)
+  (setq pdf-view-continuous nil) ;; Makes it so scrolling down to the bottom/top of a page doesn't switch to the next page
+  (setq pdf-view-midnight-colors '("#ffffff" . "#121212" )) ;; I use midnight mode as dark mode, dark mode doesn't seem to work
+  :general
+  (general-define-key
+   :states '(motion visual)
+   :keymaps 'pdf-view-mode-map
+                      "j" 'pdf-view-next-page
+                      "k" 'pdf-view-previous-page
+
+                      "C-j" 'pdf-view-next-line-or-next-page
+                      "C-k" 'pdf-view-previous-line-or-previous-page
+
+                      ;; Arrows for movement as well
+                      (kbd "<down>") 'pdf-view-next-line-or-next-page
+                      (kbd "<up>") 'pdf-view-previous-line-or-previous-page
+
+                      (kbd "<down>") 'pdf-view-next-line-or-next-page
+                      (kbd "<up>") 'pdf-view-previous-line-or-previous-page
+
+                      (kbd "<left>") 'image-backward-hscroll
+                      (kbd "<right>") 'image-forward-hscroll
+
+                      "H" 'pdf-view-fit-height-to-window
+                      "0" 'pdf-view-fit-height-to-window
+                      "W" 'pdf-view-fit-width-to-window
+                      "=" 'pdf-view-enlarge
+                      "-" 'pdf-view-shrink
+
+                      "q" 'quit-window
+                      "Q" 'kill-this-buffer
+                      "g" 'revert-buffer
+
+                      "C-s" 'isearch-forward
+                      )
+  )
+
+;; Make it possible to take notes side by side a pdf with link.
+(use-package org-noter
+  :ensure t
+  :defer t
+  :mode ("\\.pdf\\'" . pdf-view-mode)
+  :config
+  (setq org-noter-set-start-location t)
+  (setq org-noter-enable-update-renames t)
+  (setq org-noter-always-create-frame nil)
+  )
+
+;; Calendar view for agenda
+(use-package calfw
+  :ensure t
+  )
+
+;; Need to add more configuration to make google calendar sync.
+;; (use-package emacs-request
+;;   :ensure t
+;;   :defer t)
+;; (use-package alert
+;;   :ensure t
+;;   :defer t)
+;; (use-package emacs-aio
+;;   :ensure t
+;;   :defer t)
+;; (use-package emacs-oauth2-auto
+;;   :ensure t
+;;   :defer t)
+;; (use-package org-gcal
+;;   :ensure t
+;;   :defer t)
 
 
 
@@ -2119,8 +2340,10 @@ _q_uit          _e_qualize        _]_forward     ^
 ;;     - installed bunch of python packages, some are from pacman & aur repo.
 ;;     - a mode is also required by the server which here it is using 'web-mode'
 ;; Ref - https://github.com/manateelazycat/lsp-bridge?tab=readme-ov-file
-(require 'lsp-bridge)
-(global-lsp-bridge-mode)
+;; (require 'lsp-bridge)
+;; (setq acm-enable-quick-access t)
+;; (global-lsp-bridge-mode)
+;; lsp-bridge is causing emacs to crash unexpectedly.
 
 
 ;; Perspective is not good as I thought, and need more modification.
@@ -2137,6 +2360,22 @@ _q_uit          _e_qualize        _]_forward     ^
   (add-hook 'kill-emacs-hook #'persp-state-save)
   )
  
+;; (defun my-handle-error-advice (orig-fun &rest args)
+;;   "Advice function to save backtrace when an error occurs."
+;;   (condition-case err
+;;       (apply orig-fun args)
+;;     (error
+;;      (with-temp-file "~/emacs-error.log"
+;;        (insert (format "Error occurred: %s\n" err))
+;;        (insert (format "Backtrace:\n%s\n" (with-output-to-string (backtrace))))
+;;        (insert (format "Arguments: %S\n" args))))
+;;     (signal (car err) (cdr err))))
+
+;; (advice-add 'handle-error :around #'my-handle-error-advice)
+
+(use-package json-mode
+  :ensure t
+  :defer t)
 
 
 
