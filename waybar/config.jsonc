@@ -1,0 +1,189 @@
+{
+
+// olfreg314
+// Modified: 12 May 24
+
+
+    "layer": "top",
+    "position": "bottom",
+    "height": 24,
+    "spacing": 5,
+
+    "modules-left": ["user","hyprland/workspaces", "group/usage", "privacy","systemd-failed-units","keyboard-state"],
+    "modules-center": ["clock"],
+    "modules-right": ["group/connection", "wireplumber", "group/bat", "tray","hyprland/language"],
+
+    "group/usage": {
+        "orientation": "horizontal",
+        "modules": ["memory", "temperature"]
+    },
+
+    "group/bat": {
+        "orientation": "horizontal",
+        "modules": ["battery", "backlight"]
+    },
+
+    "group/connection": {
+        "orientation": "horizontal",
+        "modules": [ "network", "bluetooth"]
+    },
+"user": {
+        "format": "   <span color='#e27e8d'>λ {user}</span>",
+        "interval": 60,
+},
+    "hyprland/workspaces": {
+        "format": "{name}",
+        "on-click": "activate",
+        "icon-size": 50,
+        "sort-by-number": true,
+        "persistent-workspaces": {
+            "1": [],
+            "2": [],
+            "3": [],
+            "4": [],
+            "5": [],
+        },
+		"show-special" : false
+    },
+
+     "clock": {
+        // "format": "{:%H:%M}  ",
+		// there is problem with tooltip
+        "format": "{:%A | %B %d %Y | %R}",
+        "tooltip-format": "\n <small>{calendar}</small> \n",
+        "calendar": {
+                    "mode"          : "year",
+                    "mode-mon-col"  : 3,
+                    "weeks-pos"     : "right",
+                    "on-scroll"     : 1,
+                    "format": {
+                              "months":     "<span color='#ebbf83'><b>{}</b></span>",
+                              "days":       "<span color='#b7c5d3'><b>{}</b></span>",
+                              "weeks":      "<span color='#8bd49c'><b>W{}</b></span>",
+                              "weekdays":   "<span color='#e3ac78'><b>{}</b></span>",
+                              "today":      "<span color='#e27e8d'><b><u>{}</u></b></span>"
+                              }
+                    },
+        "actions":  {
+                    "on-click-right": "mode",
+                    "on-click-forward": "tz_up",
+                    "on-click-backward": "tz_down",
+                    "on-scroll-up": "shift_up",
+                    "on-scroll-down": "shift_down"
+                    }
+    },
+    "wireplumber": {
+        "format": "<span color='#539afc'>♪</span> {volume}%",
+        "max-volume": 100,
+		"on-click":"wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+		"format-muted": "<span color='#b62d65'>muted</span>",
+        "scroll-step": 5
+    },
+
+    "battery": {
+        "states": {
+            // "good": 95,
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{capacity}% {icon}",
+        "format-full": "{capacity}% {icon}",
+        "format-charging": "{capacity}% ",
+        "format-plugged": "{capacity}% ",
+        "format-alt": "{time} {icon}",
+        // "format-good": "", // An empty format will hide the module
+        // "format-full": "",
+        "format-icons": ["", "", "", "", ""]
+    },
+
+"systemd-failed-units": {
+	"hide-on-ok": false, // Do not hide if there is zero failed units.
+	"format": "✗ {nr_failed}",
+	"format-ok": "✓",
+	"system": true, // Monitor failed systemwide units.
+	"user": true // Ignore failed user units.
+},
+    "backlight": {
+        "format": "\udb80\udcdf  {percent}%"
+    },
+"keyboard-state": {
+    "numlock": true,
+    "capslock": true,
+    "format": {
+        "numlock": " N {icon}",
+        "capslock": " <span color='#98fb98'> C {icon} </span>"                                                                                                                                                       
+    },
+    "format-icons": {
+        "locked": "<span color='#b62d65'></span>",
+        "unlocked": ""
+    }
+},
+    "memory": {
+        "interval": 5,
+        "format": "<span color='#539afc'>\u2618</span> {used:0.1f}G/{avail:0.1f}G  <span color='#539afc'>\u269a</span> {swapUsed:0.1f}/{swapAvail:0.1f}",
+		// Coloring in tooltip-format not working but same string working for format
+		//"tooltip-format": "\n Memory: <span color='#ebbf83'> {used:0.1f}G </span> Avail:  <span color='#ebbf83'> {avail:0.1f}G </span> Total:  <span color='#ebbf83'>{total:0.1f} </span>",
+		"tooltip-format": "\n Memory: {used:0.1f}G Avail: {avail:0.1f}G Total: {total:0.1f}G \n Swap: {swapUsed:0.1f}G Aavil: {swapAvail:0.1f}G Total: {swapTotal:0.1f}G \n",
+    },
+
+    "temperature": {
+	"interval": 5,
+        "format": "<span color='#539afc'>\u269b</span> {temperatureC}°C",
+		"critical-threshold": 80,
+		"format-critical": "<span color='#e27e8d'>{temperatureC}°C</span> <span color='#b62d65'>System Critical</span>"
+    },
+
+    "network": {
+        "format": "",
+		// todo ethernet
+        "format-ethernet": "\udb83\udc9d ",
+        "format-wifi": "<span color='#e27e8d'>{bandwidthDownBytes}<span color='#b7c5d3'> | </span>{bandwidthUpBytes}</span> <span color='#8bd49c'>{icon}</span> {essid} <span color='#8bd49c'>{ifname}:</span> <span color='#e27e8d'>{ipaddr}/{cidr}</span>",
+        "format-disconnected": "<span color='#e27e8d'>\udb83\udc9c </span> Disconnected",
+        "format-icons": ["\udb82\udd2f", "\udb82\udd1f", "\udb82\udd22", "\udb82\udd25", "\udb82\udd28"],
+        "tooltip-format-wifi": "\n Access point : {essid} \n Signal strength : <span color='#e3ac78'> {signaldBm} ({signalStrength}%) </span> \n Frequency : <span color='#e3ac78'>{frequency}</span> \n Ifname : <span color='#8bd49c'> {ifname} </span> \n Ip addr : <span color='#e27e8d'>{ipaddr}/{cidr}</span> \n Default gateway : <span color='#e3ac78'> {gwaddr} </span> \n Netmask : <span color='#e3ac78'> {netmask} </span> \n",
+        "tooltip-format-ethernet": "{ifname}",
+        "tooltip-format-disconnected": "Disconnected",
+		"interval": 1
+    },
+
+    "bluetooth": {
+        "format": "\udb80\udcaf",
+        "format-disabled": "<span color='#e27e8d'>\udb80\udcb2</span>",
+        "format-connected": "<span color='#8bd49c'>\udb80\udcb1</span> <span color='#e27e8d'>{device_address}</span>",
+        "tooltip-format": "\n Controller : {controller_alias} \n Controller-addr : {controller_address} \n",
+        "tooltip-format-connected": "\n {controller_alias} : {controller_address} \n Controller address type : {controller_address_type} \n {device_alias} : {device_address} \n Device address type : {device_address_type} \n",
+        "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}"
+    },
+
+    "hyprland/language": {
+        "format": "{short}"
+    },
+
+    "tray": {
+        "icon-size": 16,
+        "spacing": 16
+    },
+
+"privacy": {
+	"icon-spacing": 4,
+	"icon-size": 18,
+	"transition-duration": 250,
+	"modules": [
+		{
+			"type": "screenshare",
+			"tooltip": true,
+			"tooltip-icon-size": 24
+		},
+		{
+			"type": "audio-out",
+			"tooltip": true,
+			"tooltip-icon-size": 24
+		},
+		{
+			"type": "audio-in",
+			"tooltip": true,
+			"tooltip-icon-size": 24
+		}
+	]
+},
+}}
