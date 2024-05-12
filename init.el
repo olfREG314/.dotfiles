@@ -40,7 +40,7 @@
 ;; --- Package Setup                :packagesetup
 ;; --- Dashboard                    :dashboard
 ;; --- Tab bar                      :tabbar
-;; --- Packages Basic               :packagesbasic
+;; --- Packages Basic               :packages
 ;; --- Undo                         :undo
 ;; --- Mini Buffer Completion       :minibuffercompletion
 ;; --- --- Vertico                  :mini/vertico
@@ -71,8 +71,7 @@
 ;; Added support for popper pkg for different buffers and modes.
 ;; Added supersave package for saving buffer in different scenario.
 ;; Modified undo-tree but need further fixing.
-;; Added support to show agenda logs of previous days completed tasks by default.
-;; Added more todo list items, like "learn, study-book, underway, focus, revist, seek-feedback, etc".
+;; Added support to show agenda logs of previous days completed tasks by default.k;; Added more todo list items, like "learn, study-book, underway, focus, revist, seek-feedback, etc".
 ;; Added keyword faces for newly added todo list items.
 ;; Added support for pdf through pdf-tools.
 ;; Added org-noter but need further customization to work.
