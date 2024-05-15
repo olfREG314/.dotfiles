@@ -13,4 +13,8 @@ link-waybar: waybar/config.jsonc
 link-hyprland: hypr/hyprland.conf 
 	ln -sf ~/.dotfiles/hypr ~/.config/hypr 
 
+link-ranger: ranger/rc.conf
+	ln -sf ~/.dotfiles/ranger ~/.config/ranger
 
+link-dircolors: dircolors/.dircolors
+	ln -sf ~/.dotfiles/dircolors/.dircolors
