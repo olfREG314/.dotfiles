@@ -17,4 +17,7 @@ link-ranger: ranger/rc.conf
 	ln -sf ~/.dotfiles/ranger ~/.config/ranger
 
 link-dircolors: dircolors/.dircolors
-	ln -sf ~/.dotfiles/dircolors/.dircolors
+	ln -sf ~/.dotfiles/dircolors/.dircolors ~/.dircolors
+
+link-zsh: zsh/.zshrc
+	ln -sf ~/.dotfiles/zsh/.zshrc ~/.zshrc
