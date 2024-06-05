@@ -100,8 +100,6 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-export WECHALLUSER="olfreg314"
-export WECHALLTOKEN="393C9-CAF60-32B2D-70221-1B855-D415B"
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
@@ -118,3 +116,8 @@ export GRIM_DEFAULT_DIR="/home/olfreg314/screenshots/"
 alias notes='cd ~/notes'
 alias v='vim'
 export RANGER_LOAD_DEFAULT_RC=false
+
+export VISUAL="emacsclient --reuse-frame --no-wait"
+export EDITOR="emacsclient --reuse-frame --no-wait"
+
+bindkey '^o' autosuggest-accept 
